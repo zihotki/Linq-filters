@@ -12,31 +12,31 @@ No nuget package is provided at the moment and, probably, it doesn't make much s
 EF Code First Model:
 
 ```cs
-    public class DrugUnit
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int DrugUnitId { get; set; }
-    
-        public DrugStatus DrugStatus { get; set; }
-    
-        public virtual ICollection<ShipmentEntry> ShipmentEntries { get; set; }
-    
-        public static FilterExpression<DrugUnit> IsNotInTransit = FilterExpression<DrugUnit>.Create(
-            d => d.ShipmentEntries.Any(s => s.Shipment.ShipmentStatus != ShipmentStatus.InTransit));
-    
-        public static FilterExpression<DrugUnit> IsInTransit = FilterExpression<DrugUnit>.Create(
-            d => d.ShipmentEntries.Any(s => s.Shipment.ShipmentStatus == ShipmentStatus.InTransit));
-    }
+public class DrugUnit
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public int DrugUnitId { get; set; }
+
+    public DrugStatus DrugStatus { get; set; }
+
+    public virtual ICollection<ShipmentEntry> ShipmentEntries { get; set; }
+
+    public static FilterExpression<DrugUnit> IsNotInTransit = FilterExpression<DrugUnit>.Create(
+        d => d.ShipmentEntries.Any(s => s.Shipment.ShipmentStatus != ShipmentStatus.InTransit));
+
+    public static FilterExpression<DrugUnit> IsInTransit = FilterExpression<DrugUnit>.Create(
+        d => d.ShipmentEntries.Any(s => s.Shipment.ShipmentStatus == ShipmentStatus.InTransit));
+}
 ```
 
 Usage of filter expressions:
 
 ```cs
-    using (var context = new TestDbContext())
-    {
-        var drugs = context.Drugs.Where(DrugUnit.IsNotInTransit.And(d => d.DrugStatus == DrugStatus.Active));
-    
-        Console.WriteLine(drugs.ToList().Count);
-    }
+using (var context = new TestDbContext())
+{
+    var drugs = context.Drugs.Where(DrugUnit.IsNotInTransit.And(d => d.DrugStatus == DrugStatus.Active));
+
+    Console.WriteLine(drugs.ToList().Count);
+}
 ```
