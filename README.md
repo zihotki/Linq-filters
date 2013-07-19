@@ -35,7 +35,8 @@ Usage of filter expressions:
 ```cs
 using (var context = new TestDbContext())
 {
-    var drugs = context.Drugs.Where(DrugUnit.IsNotInTransit.And(d => d.DrugStatus == DrugStatus.Active));
+    var drugs = context.Drugs.Where(DrugUnit.IsNotInTransit.
+        And(d => d.DrugStatus == DrugStatus.Active));
 
     Console.WriteLine(drugs.ToList().Count);
 }
